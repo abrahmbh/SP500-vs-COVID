@@ -1,8 +1,8 @@
 # SP500-vs-COVID
 
--This project shows if S&P500 is affected by covid or not. 
+-This project shows if S&P500 is affected by covid or not.
 
--A very basic and preliminary analysis is performed to arrive to conclusion. 
+-A very basic and preliminary analysis is performed to arrive to conclusion.
 
 -Open prices for sp500 are tracked everyday from Jan 13, 2020 to Mar 5, 2021.
 
