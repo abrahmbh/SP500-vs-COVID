@@ -1,0 +1,57 @@
+---
+title: "Week 3 Assignment"
+author: "Aum Brahmbhatt"
+date: "April 28, 2021"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE,  message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(dplyr)
+library(plotly)
+library(tidyr)
+```
+
+## S&P 500 vs COVID IN U.S
+
+- This presentation shows how S&P 500 reacts to covid cases in United States
+
+- This analysis is only valid for United States. 
+
+- S&P 500 Data was collected from finance.yahoo.com
+
+- covid data was collected from covidtracking.com/data
+
+## GRAPH S&P 500 PRICE VS INCREASE IN COVID CASES
+```{r, comment="", message = FALSE, warning = FALSE}
+sp <- read.csv("sp500.csv")
+sp <- sp[, c("Date", "Open")]
+sp <- mutate(sp, Date = gsub(",", "", Date))
+sp <- mutate (sp, Date = as.Date(Date, format = "%B %d %Y"))
+sp <- mutate(sp, Date = as.character(Date))
+sp <- mutate(sp, Open = as.numeric(gsub(",", "", Open)))
+covid <- read.csv("covid.csv")
+covid <- covid[, c("date", "positiveIncrease")]
+covid <- mutate(covid, positiveIncrease = positiveIncrease/50)
+final <- merge(sp, covid, by.x = "Date", by.y = "date")
+final <- gather(final, key = "index", value = "value", -Date)
+suppressWarnings(plot_ly(x = final$Date, y = final$value, type = 'scatter', mode = 'lines', 
+        color = final$index))
+```
+
+## CODEBOOK AND DATA MANIPULATION
+- positiveIncrease: The daily increase in API field positive, which measures Cases (confirmed plus probable) calculated based on the previous day’s value.
+
+- Open: The price at which S&P500 Opened. 
+
+- On the Y-axis we have S&P500 Pricea and scaled value of PositiveIncrease. 
+
+- On the X-axis we have dates from Jan 13, 2020 to March 5th, 2021. 
+
+- P.S: In order to fit the covid data in the graph, the covid data was scaled down by dividing the positiveIncrease by 50. 
+
+## CONCLUSION
+- From the data, we can see a drop in S&P500 only when covid cases first started to rise
+
+- Other than that, S&P500 is not affected by covid. 
+
