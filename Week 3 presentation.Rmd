@@ -1,5 +1,5 @@
 ---
-title: "Week 3 Assignment"
+title: "Week 3/4 Assignment"
 author: "Aum Brahmbhatt"
 date: "April 28, 2021"
 output: ioslides_presentation
@@ -22,6 +22,25 @@ library(tidyr)
 
 - covid data was collected from covidtracking.com/data
 
+## CODE USED TO DISPLAY THE GRAPH ON NEXT SLIDE
+```{r, comment="", message = FALSE, warning = FALSE, eval=FALSE, echo=TRUE}
+sp <- read.csv("sp500.csv")
+sp <- sp[, c("Date", "Open")]
+sp <- mutate(sp, Date = gsub(",", "", Date))
+sp <- mutate (sp, Date = as.Date(Date, format = "%B %d %Y"))
+sp <- mutate(sp, Date = as.character(Date))
+sp <- mutate(sp, Open = as.numeric(gsub(",", "", Open)))
+covid <- read.csv("covid.csv")
+covid <- covid[, c("date", "positiveIncrease")]
+covid <- mutate(covid, positiveIncrease = positiveIncrease/50)
+final <- merge(sp, covid, by.x = "Date", by.y = "date")
+final <- gather(final, key = "index", value = "value", -Date)
+suppressWarnings(plot_ly(x = final$Date, y = final$value, 
+                         type = 'scatter', 
+                         mode = 'lines', 
+        color = final$index))
+```
+
 ## GRAPH S&P 500 PRICE VS INCREASE IN COVID CASES
 ```{r, comment="", message = FALSE, warning = FALSE}
 sp <- read.csv("sp500.csv")
@@ -35,7 +54,8 @@ covid <- covid[, c("date", "positiveIncrease")]
 covid <- mutate(covid, positiveIncrease = positiveIncrease/50)
 final <- merge(sp, covid, by.x = "Date", by.y = "date")
 final <- gather(final, key = "index", value = "value", -Date)
-suppressWarnings(plot_ly(x = final$Date, y = final$value, type = 'scatter', mode = 'lines', 
+suppressWarnings(plot_ly(x = final$Date, y = final$value, type = 'scatter', 
+                         mode = 'lines', 
         color = final$index))
 ```
 
